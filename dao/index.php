@@ -10,9 +10,19 @@ require_once("config.php");
 $a04 = $sql->select("select * from a04");
 echo json_encode($a04);*/
 
-$cartao = new Cartao();
+/*$cartao = new Cartao();
 $cartao->loadByUkey("b08b2eca2316");
 
 echo $cartao;
+*/
+//$lista = cartao::getList();
+//echo json_encode($lista);
+
+//$search = Cartao::search("sa");
+//echo json_encode($search);
+$login = new Cartao();
+$login->login("daniel","moreira");
+
+echo $login;
 
 ?>

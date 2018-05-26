@@ -57,6 +57,40 @@ class Cartao{
             $this->setA04_005_c($row['A04_005_C']);
         }
     }
+    public static function getList(){
+        $sql = new Sql();
+        return $sql->select("select * from a04 order by a04_001_c;");
+    }
+
+    public static function search($a04_001_c){
+        $sql= new Sql();
+        return $sql->select("select * from a04 where a04_001_c LIKE :SEARCH ORDER BY a04_001_c",array(
+            ':SEARCH'=>"%".$a04_001_c."%"
+        ));
+    }
+
+    public function login($login,$senha){
+        $sql = new Sql();
+
+        $results = $sql->select("select * from a04 where a04_001_c = :LOGIN and a04_005_c = :SENHA",array(
+            ":LOGIN"=>$login,
+            ":SENHA"=>$senha
+        ));
+
+        if(count($results)>0 ){
+            //print_r($results);
+            $row=$results[0];
+
+            $this->setUkey($row['UKEY']);
+            $this->setTimestamp(new DateTime($row['TIMESTAMP']));
+            $this->setA04_001_c($row['A04_001_C']);
+            $this->setA04_005_c($row['A04_005_C']);
+        } else {
+            throw new Exception("Login ou senha ivalido.");
+        }
+
+    }
+
     public function __toString()
     {
         return json_encode(array(
