@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: joab
  * Date: 26/05/2018
- * Time: 09:02
+ * Time: 09:02 ok alterado aqui
  */
 class Cartao{
     private $UKEY;
