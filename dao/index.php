@@ -34,9 +34,17 @@ echo $login;*/
 
 //alterando
 
-$cartao = new Cartao();
+/*$cartao = new Cartao();
 $cartao->loadByUkey("b0aa5c447b6a                ");
-$cartao->update("VISA","OUROCARD BOM bom");
+$cartao->update("VISA","OUROCARD BOM bom");*/
+
+//delete
+$cartao = new Cartao();
+$cartao->loadByUkey("b0aa9819b0ea        ");
+$cartao->delete();
+
+ECHO $cartao;
+
 
 ECHO $cartao;
 

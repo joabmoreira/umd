@@ -9,7 +9,7 @@ class Cartao{
     private $UKEY;
     private $A04_001_C;
     private $A04_005_C;
-    //private $TIMESTAMP;
+    private $TIMESTAMP;
 
 
     public function getUkey(){
@@ -19,12 +19,12 @@ class Cartao{
         $this->UKEY = $value;
     }
 
-    /*public function getTimestamp(){
+    public function getTimestamp(){
         return $this->TIMESTAMP;
     }
     public function setTimestamp($value){
         $this->TIMESTAMP = $value;
-    }*/
+    }
 
     public function getA04_001_c(){
         return $this->A04_001_C;
@@ -82,7 +82,7 @@ class Cartao{
 
     public function setData($data){
         $this->setUkey($data['UKEY']);
-        //$this->setTimestamp(new DateTime($data['TIMESTAMP']));
+        $this->setTimestamp(new DateTime($data['TIMESTAMP']));
         $this->setA04_001_c($data['A04_001_C']);
         $this->setA04_005_c($data['A04_005_C']);
     }
@@ -132,6 +132,17 @@ class Cartao{
             ':UKEY'=>$this->getUkey()
         ));
 
+    }
+
+    public function delete(){
+        $sql = new Sql();
+        $sql->query("delete a04 where ukey=:UKEY",array(
+            ':UKEY'=>$this->getUkey()
+        ));
+        $this->setUkey("");
+        $this->setA04_005_c("");
+        $this->getA04_001_c("");
+        $this->getTimestamp(new DateTime());
     }
 
     public  function __construct($ukey='',$a04_001_c='',$a04_005_c='')
