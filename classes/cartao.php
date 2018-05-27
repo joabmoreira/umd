@@ -9,7 +9,7 @@ class Cartao{
     private $UKEY;
     private $A04_001_C;
     private $A04_005_C;
-    private $TIMESTAMP;
+    //private $TIMESTAMP;
 
 
     public function getUkey(){
@@ -19,12 +19,12 @@ class Cartao{
         $this->UKEY = $value;
     }
 
-    public function getTimestamp(){
+    /*public function getTimestamp(){
         return $this->TIMESTAMP;
     }
     public function setTimestamp($value){
         $this->TIMESTAMP = $value;
-    }
+    }*/
 
     public function getA04_001_c(){
         return $this->A04_001_C;
@@ -48,13 +48,7 @@ class Cartao{
         ));
 
         if(count($results)>0 ){
-            //print_r($results);
-            $row=$results[0];
-
-            $this->setUkey($row['UKEY']);
-            $this->setTimestamp(new DateTime($row['TIMESTAMP']));
-            $this->setA04_001_c($row['A04_001_C']);
-            $this->setA04_005_c($row['A04_005_C']);
+            $this->setData($results[0]);
         }
     }
     public static function getList(){
@@ -79,23 +73,79 @@ class Cartao{
 
         if(count($results)>0 ){
             //print_r($results);
-            $row=$results[0];
+            $this->setData($results[0]);
 
-            $this->setUkey($row['UKEY']);
-            $this->setTimestamp(new DateTime($row['TIMESTAMP']));
-            $this->setA04_001_c($row['A04_001_C']);
-            $this->setA04_005_c($row['A04_005_C']);
         } else {
             throw new Exception("Login ou senha ivalido.");
         }
+    }
 
+    public function setData($data){
+        $this->setUkey($data['UKEY']);
+        //$this->setTimestamp(new DateTime($data['TIMESTAMP']));
+        $this->setA04_001_c($data['A04_001_C']);
+        $this->setA04_005_c($data['A04_005_C']);
+    }
+
+    public function insert(){
+        try {
+            $sql = new Sql();
+
+            /*$results = $sql->select("EXECUTE dbo.sp_a04_insert :UKEY,:A04_001_C,:A04_005_C ", array(
+                ':UKEY' => $this->getUkey(),
+                ':A04_001_C' => $this->getA04_001_c(),
+                ':A04_005_C' => $this->getA04_005_c()
+            ));*/
+
+            $results = $sql->select("INSERT INTO A04 (UKEY,A04_001_C,A04_005_C) VALUES(:UKEY,:A04_001_C,:A04_005_C) ", array(
+                ':UKEY' => $this->getUkey(),
+                ':A04_001_C' => $this->getA04_001_c(),
+                ':A04_005_C' => $this->getA04_005_c()
+            ));
+
+
+        }catch (Exception $e) {
+            echo 'ERRO AO INSERIR: ',  $e->getMessage();
+        }
+
+        $results2 = $sql->select("select * from a04 where ukey =:UKEY",array(
+            ':UKEY' => $this->getUkey()
+        ));
+
+        if (count($results2)>0){
+            $this->setData($results2[0]);
+        }else{
+            echo "erro ao incluir";
+        }
+            
+    }
+
+    public function update($a04_001_c,$a04_005_c){
+        $this->setA04_001_c($a04_001_c);
+        $this->setA04_005_c($a04_005_c);
+
+        $sql = new Sql();
+
+        $sql->query("UPDATE A04 SET A04_001_C = :A04_001_C,A04_005_C =:A04_005_C WHERE UKEY =:UKEY",array(
+            ':A04_001_C'=>$this->getA04_001_c(),
+            ':A04_005_C'=>$this->getA04_005_c(),
+            ':UKEY'=>$this->getUkey()
+        ));
+
+    }
+
+    public  function __construct($ukey='',$a04_001_c='',$a04_005_c='')
+    {
+        $this->setUkey($ukey);
+        $this->setA04_001_c($a04_001_c);
+        $this->setA04_005_C($a04_005_c);
     }
 
     public function __toString()
     {
         return json_encode(array(
             "UKEY"=>$this->getUkey(),
-            "TIMESTAMP"=>$this->getTimestamp()->format("d/m/y H:i:s"),
+           // "TIMESTAMP"=>$this->getTimestamp()->format("d/m/y H:i:s"),
             "A04_001_C"=>$this->getA04_001_c(),
             "A04_005_C"=>$this->getA04_005_c()
         ));

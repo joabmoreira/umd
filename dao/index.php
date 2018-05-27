@@ -10,19 +10,34 @@ require_once("config.php");
 $a04 = $sql->select("select * from a04");
 echo json_encode($a04);*/
 
-/*$cartao = new Cartao();
-$cartao->loadByUkey("b08b2eca2316");
+//$cartao = new Cartao();
+//$cartao->loadByUkey("b08b2eca2316");
 
-echo $cartao;
-*/
+//echo $cartao;
+
 //$lista = cartao::getList();
 //echo json_encode($lista);
 
 //$search = Cartao::search("sa");
 //echo json_encode($search);
-$login = new Cartao();
+
+/*$login = new Cartao();
 $login->login("daniel","moreira");
 
-echo $login;
+echo $login;*/
+//inserir
+//$car = new Cartao(substr(uniqid(),1,20),"elo","bb");
+//$car->insert();
+
+//echo $car;
+
+
+//alterando
+
+$cartao = new Cartao();
+$cartao->loadByUkey("b0aa5c447b6a                ");
+$cartao->update("VISA","OUROCARD BOM bom");
+
+ECHO $cartao;
 
 ?>
